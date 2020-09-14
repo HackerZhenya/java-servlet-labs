@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>fn</short-name>
+    <uri>/tlds</uri>
+
+    <function>
+        <name>formatTimestamp</name>
+        <function-class>com.hackerzhenya.Utils</function-class>
+        <function-signature>java.lang.String formatTimestamp(java.lang.Long,java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>formatFileSize</name>
+        <function-class>com.hackerzhenya.Utils</function-class>
+        <function-signature>java.lang.String formatFileSize(java.lang.Long)</function-signature>
+    </function>
+</taglib>
