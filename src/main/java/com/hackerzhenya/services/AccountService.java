@@ -1,25 +1,26 @@
 package com.hackerzhenya.services;
 
 import com.hackerzhenya.dto.User;
+import com.hackerzhenya.repositories.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AccountService {
-    private final Map<String, User> users;
+    private final UserRepository userRepository;
     private final Map<String, User> session;
 
-    public AccountService() {
-        users = new HashMap<>();
+    public AccountService(UserRepository userRepository) {
+        this.userRepository = userRepository;
         session = new HashMap<>();
     }
 
     public void addNewUser(User user) {
-        users.put(user.getLogin(), user);
+        userRepository.create(user);
     }
 
     public User getUserByLogin(String login) {
-        return users.get(login);
+        return userRepository.findByLogin(login);
     }
 
     public User getUserBySessionId(String sessionId) {
