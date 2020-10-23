@@ -27,7 +27,12 @@
 </head>
 <body>
 <div>${now}</div>
-<h1>${path}</h1>
+<h1>
+    ${path}
+    <span style="float: right;">
+        <a href="/auth?action=logout">Выйти</a>
+    </span>
+</h1>
 <hr>
 
 <table>

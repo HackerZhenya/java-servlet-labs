@@ -1,7 +1,11 @@
 package com.hackerzhenya.servlets;
 
+import com.hackerzhenya.http.MiddlewareProcessor;
+import com.hackerzhenya.middlewares.AuthMiddleware;
+import com.hackerzhenya.middlewares.FilePathMiddleware;
+import com.hackerzhenya.services.AccountService;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,22 +14,32 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/files")
 public class FilesServlet extends HttpServlet {
-    protected final String DEFAULT_PATH = "/";
+    private final MiddlewareProcessor middlewareProcessor;
+
+    public FilesServlet(AccountService accountService) {
+        this.middlewareProcessor = new MiddlewareProcessor(new ArrayList<>(){{
+            add(new AuthMiddleware(accountService, "/auth"));
+            add(new FilePathMiddleware("/Users"));
+        }});
+    }
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (middlewareProcessor.Process(req, resp)) {
+            super.service(req, resp);
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String sPath = req.getParameter("path");
-        sPath = sPath == null || sPath.length() == 0 ? DEFAULT_PATH : sPath;
-
-        Path path = Paths.get(sPath);
+        Path path = (Path) req.getAttribute("path");
         File file = path.toFile();
 
         if (file.isDirectory()) {
