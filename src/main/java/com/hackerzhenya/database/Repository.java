@@ -1,22 +1,11 @@
 package com.hackerzhenya.database;
 
-import java.sql.SQLException;
+import org.hibernate.Session;
 
 public abstract class Repository {
-    protected final Executor executor;
+    protected final Session session;
 
-    public Repository(Executor executor) {
-        this.executor = executor;
-
-        try {
-            migrate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    protected void migrate() throws SQLException {
-
+    public Repository(Session session) {
+        this.session = session;
     }
 }

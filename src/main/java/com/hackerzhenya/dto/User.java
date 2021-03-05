@@ -1,39 +1,68 @@
 package com.hackerzhenya.dto;
 
-public class User {
-    private final String login;
-    private final String pass;
-    private final String email;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 
-    public User(String login, String pass, String email) {
-        validateNotEmpty("login", login);
-        validateNotEmpty("pass", pass);
-        validateNotEmpty("email", email);
+@Entity
+@Table(name = "users")
+public class User implements Serializable {
+    private static final long serialVersionUID = -5170875020617735653L;
 
-        this.login = login;
-        this.pass = pass;
-        this.email = email;
+    @Id
+    @Column(name = "login", unique = true, updatable = false)
+    private String login;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "email")
+    private String email;
+
+    protected User() {}
+
+    public User(String login, String password, String email) {
+        this(login, password);
+        this.setEmail(email);
+    }
+
+    public User(String login, String password) {
+        this.setLogin(login);
+        this.setPassword(password);
     }
 
     public String getLogin() {
         return login;
     }
 
+    private void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public String getPassword() {
-        return pass;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public boolean verifyPassword(String password) {
-        return pass.equals(password);
+        return this.password.equals(password);
     }
 
-    private void validateNotEmpty(String name, String value) {
-        if (value == null || value.length() == 0) {
-            throw new RuntimeException(String.format("Поле \"%s\" не должно быть пустым", name));
-        }
+    @Override
+    public String toString() {
+        return String.format("User {login=%s, email=%s}", login, email);
     }
 }
